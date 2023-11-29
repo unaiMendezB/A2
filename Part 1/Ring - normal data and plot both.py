@@ -5,6 +5,7 @@ import os
 
 # Read the data from the file
 data = pd.read_csv('A2-ring/A2-ring-merged.txt', sep='\t', header=None)
+testData = pd.read_csv('A2-ring/A2-ring-test.txt', sep='\t', header=None)
 
 # Assign columns to variables
 x = data[0]
@@ -22,10 +23,11 @@ data_standardized = data.copy()
 # Apply normalization
 scaler = MinMaxScaler()
 data_normalized[[0, 1]] = scaler.fit_transform(data_normalized[[0, 1]])
-
+testData[[0, 1]] = scaler.fit_transform(data_normalized[[0, 1]])
 
 # Save normalized data to a CSV file
 data_normalized.to_csv('A2-ring/A2-ring-merged-normalized.txt', sep='\t', header=False, index=False)
+testData.to_csv('A2-ring/A2-ring-test-normalized.txt', sep='\t', header=False, index=False)
 
 # Apply standardization
 scaler = StandardScaler()
