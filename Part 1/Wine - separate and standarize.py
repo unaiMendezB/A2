@@ -6,6 +6,11 @@ from sklearn.model_selection import train_test_split
 # Load dataset
 df = pd.read_csv('A2-wine/winequality-white.csv', sep=';')
 
+# Check if there's any missing data
+if df.isnull().values.any():
+    # Replace null values with 0
+    df.fillna(0, inplace=True)
+
 # Standardize the dataset
 scaler = preprocessing.StandardScaler().fit(df)
 df_scaled = scaler.transform(df)
