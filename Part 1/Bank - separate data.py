@@ -23,5 +23,5 @@ train_df = pd.DataFrame(scaler.transform(train_df), columns=train_df.columns)
 test_df = pd.DataFrame(scaler.transform(test_df), columns=test_df.columns)
 
 # Save the training and test sets to csv files
-train_df.to_csv('A2-bank/bank-additional-train.txt', index=False)
-test_df.to_csv('A2-bank/bank-additional-test.txt', index=False)
+train_df.to_csv('A2-bank/bank-additional-train.csv', index=False)
+test_df.to_csv('A2-bank/bank-additional-test.csv', index=False)
