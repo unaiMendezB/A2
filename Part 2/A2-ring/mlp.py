@@ -25,7 +25,7 @@ param_grid = {
 }
 
 # Initialize the MLPClassifier
-mlp = MLPClassifier(max_iter=200)
+mlp = MLPClassifier(max_iter=1000)
 
 # Initialize the GridSearchCV
 clf = GridSearchCV(mlp, param_grid, cv=5, scoring='accuracy')
