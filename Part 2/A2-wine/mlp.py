@@ -7,24 +7,14 @@ from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 
 # Load the datasets
-train_data = pd.read_csv('wine-train.txt', sep=' ', header=None,
-                         names=['Fixed_Acidity', 'Volatile_Acidity', 'Citric_Acid', 'Residual_Sugar', 'Chlorides',
-                                'Free_Sulfur_Dioxide', 'Total_Sulfur_Dioxide', 'Density', 'pH', 'Sulphates', 'Alcohol',
-                                'Quality'])
-test_data = pd.read_csv('wine-test.txt', sep=' ', header=None,
-                        names=['Fixed_Acidity', 'Volatile_Acidity', 'Citric_Acid', 'Residual_Sugar', 'Chlorides',
-                               'Free_Sulfur_Dioxide', 'Total_Sulfur_Dioxide', 'Density', 'pH', 'Sulphates', 'Alcohol',
-                               'Quality'])
+train_data = pd.read_csv('wine-train.txt', sep='\t')
+test_data = pd.read_csv('wine-test.txt', sep='\t')
 
 # Split the datasets into features and labels
-X_train = train_data[
-    ['Fixed_Acidity', 'Volatile_Acidity', 'Citric_Acid', 'Residual_Sugar', 'Chlorides',
-     'Free_Sulfur_Dioxide', 'Total_Sulfur_Dioxide', 'Density', 'pH', 'Sulphates', 'Alcohol']]
-y_train = train_data['Quality']
-X_test = test_data[
-    ['Fixed_Acidity', 'Volatile_Acidity', 'Citric_Acid', 'Residual_Sugar', 'Chlorides',
-     'Free_Sulfur_Dioxide', 'Total_Sulfur_Dioxide', 'Density', 'pH', 'Sulphates', 'Alcohol']]
-y_test = test_data['Quality']
+X_train = train_data.iloc[:, :-1]
+y_train = train_data.iloc[:, -1]
+X_test = test_data.iloc[:, :-1]
+y_test = test_data.iloc[:, -1]
 
 # Create a Linear Regression model
 model = LinearRegression()
