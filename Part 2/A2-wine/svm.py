@@ -24,13 +24,13 @@ X_test = test_data[
 y_test = test_data['Quality']
 
 # Define the parameter range for grid search
-param_grid = {'C': [0.1, 1, 10, 100, 1000],
-              'gamma': [1, 0.1, 0.01, 0.001, 0.0001],
+param_grid = {'C': [10,100, 1000,10000],
+              'gamma': [0.1,0.01, 0.001],
               'kernel': ['rbf']}
 
 # Create a GridSearchCV object and fit it to the training data
 svc = svm.SVC()
-grid = GridSearchCV(svc, param_grid, refit=True, verbose=2, cv=10)
+grid = GridSearchCV(svc, param_grid, refit=True, verbose=2, cv=20)
 grid.fit(X_train, y_train)
 
 # Print the best parameters
@@ -51,9 +51,3 @@ print(classification_report(y_test, y_pred))
 # Print the classification error and confusion matrix
 print("Classification error: ", E)
 print("Confusion matrix: \n", cm)
-
-# Make predictions on the test data
-grid_predictions = grid.predict(X_test)
-
-# Print a classification report
-print(classification_report(y_test, grid_predictions))
