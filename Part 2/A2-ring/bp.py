@@ -17,19 +17,21 @@ y_test = test_data['Result']
 
 # Define the parameter space for grid search
 param_grid = {
-    'hidden_layer_sizes': [(50,50,50), (50,100,50), (100,)],
-    'activation': ['tanh', 'relu'],
+    'hidden_layer_sizes': [(2,), (5,), (10,), (5, 2), (10, 5)],
+    'activation': ['tanh', 'relu', 'logistic'],
     'solver': ['sgd', 'adam'],
-    'alpha': [0.0001, 0.05],
+    'alpha': [0.0001, 0.001, 0.01, 0.1, 1],
     'learning_rate': ['constant','adaptive'],
 }
 
-# Initialize the MLP classifier
-mlp = MLPClassifier(max_iter=100)
+# Initialize the MLPClassifier
+mlp = MLPClassifier(max_iter=1000)
 
-# Perform grid search with cross-validation
+# Initialize the GridSearchCV
 clf = GridSearchCV(mlp, param_grid, cv=5, scoring='accuracy')
-clf.fit(X_train,y_train)
+
+# Fit the model
+clf.fit(X_train, y_train)
 
 # Print the best parameters
 print("Best parameters found: ", clf.best_params_)
@@ -44,7 +46,6 @@ print("Confusion Matrix: \n", cm)
 # Compute ROC curve and ROC area
 fpr, tpr, _ = roc_curve(y_test, y_pred)
 roc_auc = auc(fpr, tpr)
-print('ROC curve (area = %0.2f)' % roc_auc)
 
 # Plot ROC curve
 plt.figure()
@@ -61,12 +62,21 @@ plt.show()
 # Perform PCA
 pca = PCA(n_components=2)
 principalComponents = pca.fit_transform(X_train)
-principalDf = pd.DataFrame(data = principalComponents, columns = ['principal component 1', 'principal component 2'])
+principalDf = pd.DataFrame(data=principalComponents, columns=['principal component 1', 'principal component 2'])
 
-# Plot PCA
-plt.figure(figsize = (8,8))
-plt.scatter(principalDf['principal component 1'], principalDf['principal component 2'], c = y_train)
-plt.xlabel('Principal Component 1', fontsize = 15)
-plt.ylabel('Principal Component 2', fontsize = 15)
-plt.title('2 Component PCA', fontsize = 20)
-plt.show()
+# Plot the PCA
+fig = plt.figure(figsize=(8, 8))
+ax = fig.add_subplot(1, 1, 1)
+ax.set_xlabel('Principal Component 1', fontsize=15)
+ax.set_ylabel('Principal Component 2', fontsize=15)
+ax.set_title('2 component PCA', fontsize=20)
+targets = [0, 1]
+colors = ['r', 'g']
+for target, color in zip(targets, colors):
+    indicesToKeep = y_train == target
+    ax.scatter(principalDf.loc[indicesToKeep, 'principal component 1']
+               , principalDf.loc[indicesToKeep, 'principal component 2']
+               , c=color
+               , s=50)
+ax.legend(targets)
+ax.grid()
