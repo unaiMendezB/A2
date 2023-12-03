@@ -28,7 +28,7 @@ param_grid = {
 mlp = MLPClassifier(max_iter=1000)
 
 # Initialize the GridSearchCV
-clf = GridSearchCV(mlp, param_grid, cv=5, scoring='accuracy')
+clf = GridSearchCV(mlp, param_grid, cv=5, verbose=2, scoring='accuracy')
 
 # Fit the model
 clf.fit(X_train, y_train)
