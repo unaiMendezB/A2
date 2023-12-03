@@ -1,27 +1,42 @@
 import pandas as pd
+import numpy as np
+from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
 
 # Load the dataset
 df = pd.read_csv('A2-bank/bank-additional-full.csv', sep=';')
 
-# Convert categorical variables to numerical representations
-categorical_cols = df.columns[df.dtypes==object].tolist()
-df = pd.get_dummies(df, columns=categorical_cols, drop_first=True)
+# Replace 'unknown' with NaN
+df.replace('unknown', np.nan, inplace=True)
 
-# Split the dataset into training and test sets
-train_df, test_df = train_test_split(df, test_size=0.2, shuffle=False)
+# Separate the last column
+last_col = df.iloc[:, -1]
+df = df.iloc[:, :-1]
 
-# Initialize a scaler
-scaler = StandardScaler()
+# Convert categorical variables to boolean (True/False)
+categorical_cols = df.select_dtypes(include=['object']).columns
+for col in categorical_cols:
+    df[col] = df[col].astype('category')
+    df[col] = df[col].cat.codes
+    df[col] = df[col].astype('bool')
 
-# Fit on the training set only
-scaler.fit(train_df)
+# Standardize the numerical columns in the dataset
+numerical_cols = df.select_dtypes(include=['int64', 'float64']).columns
+scaler = preprocessing.StandardScaler()
+df[numerical_cols] = scaler.fit_transform(df[numerical_cols])
 
-# Apply the transform to both the training set and the test set
-train_df = pd.DataFrame(scaler.transform(train_df), columns=train_df.columns)
-test_df = pd.DataFrame(scaler.transform(test_df), columns=test_df.columns)
+# Replace True with 0 and False with 1
+df.replace({True: 0, False: 1}, inplace=True)
 
-# Save the training and test sets to csv files
-train_df.to_csv('A2-bank/bank-additional-train.csv', index=False)
-test_df.to_csv('A2-bank/bank-additional-test.csv', index=False)
+# Apply the yes/no formula to the last column
+last_col = last_col.map({'yes': 0, 'no': 1})
+
+# Add the last column back
+df = pd.concat([df, last_col], axis=1)
+
+# Split the dataset into train and test
+train_bank, test_bank = train_test_split(df, test_size=0.2, random_state=42)
+
+# Save them in two .txt files, using tabulation as a marker
+train_bank.to_csv('A2-bank/bank-additional-train.txt', sep='\t', index=False)
+test_bank.to_csv('A2-bank/bank-additional-test.txt', sep='\t', index=False)

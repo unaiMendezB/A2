@@ -4,8 +4,8 @@ from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 
 # Load the datasets
-train_data = pd.read_csv('bank-additional-train.txt', sep=',', header=None)
-test_data = pd.read_csv('bank-additional-test.txt', sep=',', header=None)
+train_data = pd.read_csv('bank-additional-train.txt', sep='\t')
+test_data = pd.read_csv('bank-additional-test.txt', sep='\t')
 
 # Split the datasets into features and labels
 X_train = train_data.iloc[:, :-1]
