@@ -17,7 +17,7 @@ y_test = test_data.iloc[:, -1]
 
 # Define the parameter space for grid search
 param_grid = {
-    'hidden_layer_sizes': [(2,), (5,), (10,), (5, 2), (10, 5)],
+    'hidden_layer_sizes': [(24,), (48,), (72,)],
     'activation': ['tanh', 'relu', 'logistic'],
     'solver': ['sgd', 'adam'],
     'alpha': [0.0001, 0.001, 0.01, 0.1, 1],

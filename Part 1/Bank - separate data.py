@@ -13,12 +13,9 @@ df.replace('unknown', np.nan, inplace=True)
 last_col = df.iloc[:, -1]
 df = df.iloc[:, :-1]
 
-# Convert categorical variables to boolean (True/False)
+# Convert categorical variables to dummy variables
 categorical_cols = df.select_dtypes(include=['object']).columns
-for col in categorical_cols:
-    df[col] = df[col].astype('category')
-    df[col] = df[col].cat.codes
-    df[col] = df[col].astype('bool')
+df = pd.get_dummies(df, columns=categorical_cols, drop_first=True)
 
 # Standardize the numerical columns in the dataset
 numerical_cols = df.select_dtypes(include=['int64', 'float64']).columns
